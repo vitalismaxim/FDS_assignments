@@ -2,22 +2,21 @@ import re
 from datetime import date
 from os.path import join
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from wordcloud import WordCloud, STOPWORDS
 from nltk.corpus import stopwords
 import nltk
 import pandas as pd
 from nltk.probability import FreqDist
 from nltk import word_tokenize
-from nltk.corpus import stopwords
 from utils import * 
 
 
 nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('vader_lexicon')
+
+
 
 import config as cf
 
@@ -57,57 +56,42 @@ def prep_drop_numbers(s):
 
     return s
 
-def prep_drop_stopwords(words):
-    sw = stopwords.words("english")
-    sw.update(["â", "see", "going", "u", "thank", ',',
-                          "you", "itâ", "s", "well", "us", "weâ",
-                          "will", "continue", 'hello', 'good afternoon', 'afternoon',
-                          "now", "re", 'thank you', 'thanks', 'thank', 'thanks', 'good morning', 'morning',
-              'mr.', 'mr', 'president', 'secretary', 'thank', 'thanks', 'you'])
+def prep_drop_stopwords(words, sw=cf.sw):
     words = [word for word in words if word not in sw]
     return words
 
 
-def create_wordcloud():
-    def cloud(text, filename):
-        # Create stopword list:
-        stopwords = set(STOPWORDS)
+# def create_wordcloud():
+#     def cloud(text, filename, stopwords=cf.sw):
+#         # Generate a word cloud image
+#         wordcloud = WordCloud(width=600, height=400, max_font_size=90,
+#                               max_words=50, stopwords=stopwords,
+#                               background_color="white").generate(text)
 
-        # Add some words to the stop word list, this can be adjusted
-        stopwords.update(["â", "see", "going", "u", "thank", ',',
-                          "you", "itâ", "s", "well", "us", "weâ",
-                          "will", "continue", 'hello', 'good afternoon', 'afternoon',
-                          "now", "re", 'thank you', 'thanks', 'thank', 'thanks', 'good morning', 'morning'])
+#         # Display the generated image
+#         plt.imshow(wordcloud, interpolation='bilinear')
+#         plt.axis("off")
+#         plt.show()
 
-        # Generate a word cloud image
-        wordcloud = WordCloud(width=600, height=400, max_font_size=90,
-                              max_words=50, stopwords=stopwords,
-                              background_color="white").generate(text)
+#         # Save the wordcloud
+#         wordcloud.to_file(join(cf.path_images, filename))
 
-        # Display the generated image
-        plt.imshow(wordcloud, interpolation='bilinear')
-        plt.axis("off")
-        plt.show()
+#         return None
 
-        # Save the wordcloud
-        wordcloud.to_file(join(cf.path_images, filename))
+#     print('Generating wordclouds for presentations and Q&A sessions')
 
-        return None
+#     # Load data
+#     texts = pd.read_pickle(cf.A_B_texts_and_prices_file)
 
-    print('Generating wordclouds for presentations and Q&A sessions')
-
-    # Load data
-    texts = pd.read_pickle(cf.A_B_texts_and_prices_file)
-
-    # Create word cloud for presentations
-    text = ""
-    for t in texts.presentation:
-        if str(t) != 'nan':
-            text += ' ' + t
-    text = re.sub('\n', ' ', text)
-    cloud(text, "wordcloud_presentations.png")
+#     # Create word cloud for presentations
+#     text = ""
+#     for t in texts.presentation:
+#         if str(t) != 'nan':
+#             text += ' ' + t
+#     text = re.sub('\n', ' ', text)
+#     cloud(text, "wordcloud_presentations.png")
 
 
-    print('Finished generating wordclouds for presentations and Q&A sessions')
+#     print('Finished generating wordclouds for presentations and Q&A sessions')
 
-    return None
+#     return None
