@@ -48,7 +48,7 @@ def preprocess(col, steps = ['prep_lower',
 
 def prep_drop_sentenceindicators(col):
     sentenceindicators = [',', '.', '?', '\t', ':', ';', "''", "'", '"',]
-    col = [word for ll in col for word in ll if word not in sentenceindicators]
+    col = [word for word in col if word not in sentenceindicators]
 
     return col
 
@@ -59,6 +59,11 @@ def prep_drop_numbers(s):
 
 def prep_drop_stopwords(words):
     sw = stopwords.words("english")
+    sw.update(["â", "see", "going", "u", "thank", ',',
+                          "you", "itâ", "s", "well", "us", "weâ",
+                          "will", "continue", 'hello', 'good afternoon', 'afternoon',
+                          "now", "re", 'thank you', 'thanks', 'thank', 'thanks', 'good morning', 'morning',
+              'mr.', 'mr', 'president', 'secretary', 'thank', 'thanks', 'you'])
     words = [word for word in words if word not in sw]
     return words
 
@@ -71,8 +76,8 @@ def create_wordcloud():
         # Add some words to the stop word list, this can be adjusted
         stopwords.update(["â", "see", "going", "u", "thank", ',',
                           "you", "itâ", "s", "well", "us", "weâ",
-                          "will", "continue", 'hello', 'Hello', 'Good afternoon', 'afternoon',
-                          "now", "re", 'thank you', 'thanks', 'Thank', 'Thanks', 'good morning', 'morning'])
+                          "will", "continue", 'hello', 'good afternoon', 'afternoon',
+                          "now", "re", 'thank you', 'thanks', 'thank', 'thanks', 'good morning', 'morning'])
 
         # Generate a word cloud image
         wordcloud = WordCloud(width=600, height=400, max_font_size=90,
